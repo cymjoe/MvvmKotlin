@@ -4,6 +4,12 @@
 *.ap_
 *.aab
 
+.idea
+.gradle
+local.properties
+gradlew.bat
+Agency purchase Work.iml
+settings.gradle
 # Files for the ART/Dalvik VM
 *.dex
 

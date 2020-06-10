@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".main.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.cymjoe.lib_widget.BottomView
+            android:id="@+id/btn_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:checked="true"
+            app:checkedIcon="@mipmap/ic_launcher_round"
+            app:contents="首页"
+            app:normalIcon="@mipmap/ic_launcher" />
+
+        <com.cymjoe.lib_widget.BottomView
+            android:id="@+id/btn_mine"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:checkedIcon="@mipmap/ic_launcher_round"
+            app:contents="我的"
+            app:normalIcon="@mipmap/ic_launcher" />
+
+    </LinearLayout>
+
+</LinearLayout>

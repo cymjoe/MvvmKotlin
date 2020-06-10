@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomView">
+        <attr name="checkedIcon" format="reference" />
+        <attr name="normalIcon" format="reference" />
+        <attr name="colorButtonNormal" format="color" />
+        <attr name="colorButtonChecked" format="color" />
+        <attr name="contents" format="string" />
+        <attr name="checked" format="boolean" />
+
+
+    </declare-styleable>
+</resources>
