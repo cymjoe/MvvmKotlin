@@ -43,58 +43,9 @@ import java.util.*
 open class BaseRetrofit {
     protected var retrofit: Retrofit? = null
 
-    private inner class UnSafeHostnameVerifier : HostnameVerifier {
-        override fun verify(hostname: String, session: SSLSession): Boolean {
-            return true
-        }
-    }
-
-    private class UnSafeTrustManager : X509TrustManager {
-        @Throws(CertificateException::class)
-        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-        }
-
-        @Throws(CertificateException::class)
-        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-        }
-
-        override fun getAcceptedIssuers(): Array<X509Certificate> {
-            return arrayOf()
-        }
-    }
-
-    private class MyTrustManager @Throws(NoSuchAlgorithmException::class, KeyStoreException::class)
-    constructor(private val localTrustManager: X509TrustManager) : X509TrustManager {
-        private val defaultTrustManager: X509TrustManager?
-
-        init {
-            val var4 = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-            var4.init(null as KeyStore?)
-            defaultTrustManager = chooseTrustManager(var4.trustManagers)
-        }
-
-        @Throws(CertificateException::class)
-        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-        }
-
-        @Throws(CertificateException::class)
-        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-            try {
-                defaultTrustManager!!.checkServerTrusted(chain, authType)
-            } catch (ce: CertificateException) {
-                localTrustManager.checkServerTrusted(chain, authType)
-            }
-
-        }
-
-        override fun getAcceptedIssuers(): Array<X509Certificate?> {
-            return arrayOfNulls(0)
-        }
-    }
-
     lateinit var map: Map<String, String>
 
-    lateinit var certificates: Array<InputStream>
+
     protected fun createOkHttpClient(map: Map<String, String>): OkHttpClient {
         val builder = OkHttpClient.Builder()
         try {
@@ -168,7 +119,6 @@ open class BaseRetrofit {
             val response = chain.proceed(request)
             try {
 
-
                 val t2 = System.nanoTime()//收到响应的时间
                 val responseBody = response.peekBody((1024 * 1024).toLong())
                 Log.d(
@@ -191,89 +141,12 @@ open class BaseRetrofit {
     companion object {
         private const val TAG = "NetWork"
 
-        fun getSslSocketFactory(
-            certificates: Array<InputStream>?,
-            bksFile: InputStream?,
-            password: String?
-        ): SSLSocketFactory {
-            try {
-                val trustManagers = certificates?.let { prepareTrustManager(*it) }
-                val keyManagers = prepareKeyManager(bksFile, password)
-                val sslContext = SSLContext.getInstance("TLS")
-                val trustManager: TrustManager?
-                trustManager = if (trustManagers != null) {
-                    chooseTrustManager(trustManagers)?.let { MyTrustManager(it) }
-                } else {
-                    UnSafeTrustManager()
-                }
-                sslContext.init(keyManagers, arrayOf(trustManager), SecureRandom())
-                return sslContext.socketFactory
-            } catch (e: NoSuchAlgorithmException) {
-                throw AssertionError(e)
-            } catch (e: KeyStoreException) {
-                throw AssertionError(e)
-            } catch (e: KeyManagementException) {
-                throw AssertionError(e)
-            }
 
-        }
 
-        private fun prepareTrustManager(vararg certificates: InputStream): Array<TrustManager>? {
-            if (certificates.isEmpty()) return null
-            try {
-                val certificateFactory = CertificateFactory.getInstance("X.509")
-                val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-                keyStore.load(null)
-                for ((index, certificate) in certificates.withIndex()) {
-                    val certificateAlias = index.toString()
-                    keyStore.setCertificateEntry(
-                        certificateAlias,
-                        certificateFactory.generateCertificate(certificate)
-                    )
-                    try {
-                        certificate.close()
-                    } catch (e: IOException) {
-                    }
 
-                }
-                val trustManagerFactory: TrustManagerFactory? =
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-                trustManagerFactory!!.init(keyStore)
-                return trustManagerFactory.trustManagers
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 
-            return null
 
-        }
 
-        private fun prepareKeyManager(
-            bksFile: InputStream?,
-            password: String?
-        ): Array<KeyManager>? {
-            try {
-                if (bksFile == null || password == null) return null
-                val clientKeyStore = KeyStore.getInstance("BKS")
-                clientKeyStore.load(bksFile, password.toCharArray())
-                val keyManagerFactory =
-                    KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-                keyManagerFactory.init(clientKeyStore, password.toCharArray())
-                return keyManagerFactory.keyManagers
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 
-            return null
-        }
-
-        private fun chooseTrustManager(trustManagers: Array<TrustManager>): X509TrustManager? {
-            for (trustManager in trustManagers) {
-                if (trustManager is X509TrustManager) {
-                    return trustManager
-                }
-            }
-            return null
-        }
     }
 }
