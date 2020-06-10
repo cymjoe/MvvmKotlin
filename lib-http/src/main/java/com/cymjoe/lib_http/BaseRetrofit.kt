@@ -35,10 +35,6 @@ import java.io.File
 import java.util.*
 
 
-/**
- * ll
- * Created by LiRui on 2017/9/1.
- */
 
 open class BaseRetrofit {
     protected var retrofit: Retrofit? = null
