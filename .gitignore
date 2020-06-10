@@ -3,7 +3,9 @@
 *.aar
 *.ap_
 *.aab
-
+/gradle
+/.gradle
+/gradle.properties
 .idea
 .gradle
 local.properties
