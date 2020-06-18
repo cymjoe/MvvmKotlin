@@ -1,14 +1,10 @@
 package com.cymjoe.moudle_login.login
 
-import android.util.Log
 import androidx.lifecycle.Observer
-import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
 import com.cymjoe.lib_aroute.ARoutePath
 import com.cymjoe.lib_base.base.BaseActivity
-import com.cymjoe.lib_base.log
 import com.cymjoe.moudle_login.R
 import com.cymjoe.moudle_login.databinding.ActivityLoginBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,8 +30,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(true) {
         viewModel.apply {
             uiState.observe(this@LoginActivity, Observer {
                 it.errorMsg?.let { it1 -> ToastUtils.showShort(it1) }
-            })
 
+            })
+            mException.observe(this@LoginActivity, Observer {
+
+            })
         }
     }
 }

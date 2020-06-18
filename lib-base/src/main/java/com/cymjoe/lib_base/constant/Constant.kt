@@ -7,5 +7,6 @@ object Constant {
 
     //baseUrl
     const val BASE_URL = ""
+    const val LOGIN = ""
 
 }

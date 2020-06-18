@@ -13,13 +13,10 @@ import androidx.annotation.IntDef
 import com.readystatesoftware.systembartint.SystemBarTintManager
 
 object StatusBarUtils {
-    const val TYPE_MIUI = 0
-    const val TYPE_FLYME = 1
-    const val TYPE_M = 3//6.0
 
-    @IntDef(TYPE_MIUI, TYPE_FLYME, TYPE_M)
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    internal annotation class ViewType
+
+
+
 
     /**
      * 修改状态栏颜色，支持4.4以上版本
@@ -73,37 +70,12 @@ object StatusBarUtils {
     @SuppressLint("ObsoleteSdkInt")
     fun setStatusBarDarkTheme(activity: Activity, dark: Boolean): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                    setStatusBarFontIconDark(activity, TYPE_M, dark)
-                }
-                OSUtil.isMIUI -> {
-                    setStatusBarFontIconDark(activity, TYPE_MIUI, dark)
-                }
-                OSUtil.isFlyme -> {
-                    setStatusBarFontIconDark(activity, TYPE_FLYME, dark)
-                }
-                else -> {//其他情况
-                    return false
-                }
-            }
-
-            return true
+            setCommonUI(activity, dark)
         }
         return false
     }
 
-    /**
-     * 设置 状态栏深色浅色切换
-     */
-    private fun setStatusBarFontIconDark(
-        activity: Activity,
-        @ViewType type: Int,
-        dark: Boolean
-    ): Boolean {
-        return setCommonUI(activity, dark)
 
-    }
 
     //设置6.0 状态栏深色浅色切换
     private fun setCommonUI(activity: Activity, dark: Boolean): Boolean {
@@ -122,6 +94,7 @@ object StatusBarUtils {
         }
         return false
     }
+
     //获取状态栏高度
     fun getStatusBarHeight(context: Context): Int {
         var result = 0

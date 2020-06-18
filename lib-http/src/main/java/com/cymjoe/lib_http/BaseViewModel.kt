@@ -1,5 +1,6 @@
 package com.cymjoe.lib_http
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,9 @@ open class BaseViewModel : ViewModel() {
         val showNoDataView: Boolean //是否显示默认空页面
     )
 
-    var uiState = MutableLiveData<UiModel>()
+    private val _uiState = MutableLiveData<UiModel>()
+
+    val uiState: LiveData<UiModel> = _uiState
 
     fun emitUiState(
         loading: Boolean = false,
@@ -33,7 +36,7 @@ open class BaseViewModel : ViewModel() {
                 showNoNetView,
                 showNoDataView
             )
-        uiState.value = uiModel
+        _uiState.value = uiModel
     }
 
     val mException: MutableLiveData<APIException> = MutableLiveData()
@@ -43,10 +46,7 @@ open class BaseViewModel : ViewModel() {
         viewModelScope.launch { block() }
 
     }
-
-    fun cancel() {
-        viewModelScope.cancel()
-    }
+    
 
     suspend fun <T> launchOnIO(block: suspend CoroutineScope.() -> T) {
         withContext(Dispatchers.IO) {

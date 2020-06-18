@@ -120,11 +120,9 @@ abstract class BaseActivity<T : ViewDataBinding>(useBinding: Boolean = false) :
     abstract fun startObserve()
 
     override fun onDestroy() {
-
         EventBus.getDefault().unregister(this)
-
         super.onDestroy()
-        cancel()
+
     }
 
     @Subscribe
