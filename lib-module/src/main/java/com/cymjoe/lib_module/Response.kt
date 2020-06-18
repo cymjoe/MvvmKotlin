@@ -1,3 +1,3 @@
 package com.cymjoe.lib_module
 
-data class LoginResponseEntity(val token: String)
+data class LoginResponse(val token: String)

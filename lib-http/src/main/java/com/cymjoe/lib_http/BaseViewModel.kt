@@ -12,7 +12,7 @@ open class BaseViewModel : ViewModel() {
     data class UiModel(
         val loading: Boolean,//是否显示加载框
         val showErrorView: Boolean,//是否显示错误信息
-        val errorMsg: String? = "",//错误信息
+        val errorMsg: String = "",//错误信息
         val showNoNetView: Boolean,//是否显示无网络信息
         val showNoDataView: Boolean //是否显示默认空页面
     )
@@ -39,14 +39,15 @@ open class BaseViewModel : ViewModel() {
         _uiState.value = uiModel
     }
 
-    val mException: MutableLiveData<APIException> = MutableLiveData()
+    private var _mException: MutableLiveData<APIException> = MutableLiveData()
+    val mException: LiveData<APIException> = _mException
 
     private fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
 
         viewModelScope.launch { block() }
 
     }
-    
+
 
     suspend fun <T> launchOnIO(block: suspend CoroutineScope.() -> T) {
         withContext(Dispatchers.IO) {
@@ -102,7 +103,7 @@ open class BaseViewModel : ViewModel() {
                 e.printStackTrace()
                 emitUiState(loading = false)
                 val apiException = APIException(500, "连接超时")
-                mException.value = apiException
+                _mException.value = apiException
                 catchBlock(apiException)
 
             } finally {

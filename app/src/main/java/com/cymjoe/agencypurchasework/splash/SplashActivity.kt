@@ -24,7 +24,7 @@ class SplashActivity : BaseActivity<NoDataBinding>() {
     override fun initData() {
         Handler().postDelayed({
             viewModel.getPermission()
-        }, 2000)
+        }, 1000)
 
     }
 

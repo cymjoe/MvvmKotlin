@@ -1,16 +1,19 @@
-package com.cymjoe.netmanager
+package com.cymjoe.lib_http
 
 import android.app.Application
 import android.content.ContentValues.TAG
 import android.util.Log
-
+import com.google.gson.GsonBuilder
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 object NetManager {
     var application: Application? = null
@@ -25,17 +28,17 @@ object NetManager {
     var okBuilder: OkHttpClient.Builder? = null
 
 
-
     fun Builder(): NetManager {
         if (builder == null) {
             builder = Retrofit.Builder()
+
         }
         return this
     }
 
     fun setTime(readOut: Int, timeOut: Int): NetManager {
-        this.readOut = readOut.toLong()
-        this.timeOut = timeOut.toLong()
+        NetManager.readOut = readOut.toLong()
+        NetManager.timeOut = timeOut.toLong()
         return this
     }
 
@@ -122,7 +125,10 @@ object NetManager {
         }
         okBuilder!!.readTimeout(readOut, TimeUnit.SECONDS)
         okBuilder!!.callTimeout(timeOut, TimeUnit.SECONDS)
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create()
         builder!!.client(okBuilder!!.build())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+
         return this
     }
 

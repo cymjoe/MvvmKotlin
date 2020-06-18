@@ -17,7 +17,6 @@ fun Any.launch(clazz: String) {
 }
 
 
-
 fun Activity.launchOver(clazz: String) {
     launch(clazz)
     finish()
@@ -37,7 +36,9 @@ fun Activity.finishActivity(activityName: String) {
 }
 
 fun Any.toast(msg: String) {
-    ToastUtils.showShort(msg)
+    if (msg.isNoEmpty()) {
+        ToastUtils.showShort(msg)
+    }
 }
 
 // RSA加密
@@ -45,4 +46,7 @@ fun Any.encrypt(msg: String): String {
     return RSAUtils.encrypt(msg, RSAUtils.getPublicKey(Constant.PUBLIC_KEY))
 }
 
+fun String.isNoEmpty(): Boolean {
+    return this.isNotEmpty() || this != "null" || this != "NULL"
+}
 

@@ -1,3 +1,3 @@
 package com.cymjoe.lib_module
 
-data class LoginRequestEntity(val name:String, val password:String)
+data class LoginRequest(val phone:String, val password:String)
