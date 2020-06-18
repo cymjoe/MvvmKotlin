@@ -93,7 +93,7 @@ open class BaseViewModel : ViewModel() {
             try {
                 tryBlock()
             } catch (e: APIException) {
-                emitUiState(loading = false)
+                emitUiState(loading = false,errorMsg = e.msg)
                 if (handleCancellationExceptionManually) {
                     catchBlock(e)
                 } else {
