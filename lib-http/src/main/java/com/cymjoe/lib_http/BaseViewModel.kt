@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 
 open class BaseViewModel : ViewModel() {
+
+
     data class UiModel(
         val loading: Boolean,//是否显示加载框
         val showErrorView: Boolean,//是否显示错误信息
@@ -93,7 +95,7 @@ open class BaseViewModel : ViewModel() {
             try {
                 tryBlock()
             } catch (e: APIException) {
-                emitUiState(loading = false,errorMsg = e.msg)
+                emitUiState(loading = false, errorMsg = e.msg)
                 if (handleCancellationExceptionManually) {
                     catchBlock(e)
                 } else {
@@ -102,7 +104,7 @@ open class BaseViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 emitUiState(loading = false)
-                val apiException = APIException(500, "连接超时")
+                val apiException = APIException(500, States.error)
                 _mException.value = apiException
                 catchBlock(apiException)
 

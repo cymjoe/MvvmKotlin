@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="string_load_msg">请稍等</string>
+    <string name="string_error">连接超时</string>
 </resources>

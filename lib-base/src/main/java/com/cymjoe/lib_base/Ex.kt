@@ -6,8 +6,10 @@ import com.blankj.utilcode.util.ToastUtils
 import com.cymjoe.lib_aroute.ARoutePath
 import com.cymjoe.lib_aroute.ARouteUtils
 import com.cymjoe.lib_base.constant.Constant
+import com.cymjoe.lib_http.States
 import com.cymjoe.lib_utils.LogUtil
 import com.cymjoe.lib_utils.RSAUtils
+import com.tencent.mmkv.MMKV
 import org.greenrobot.eventbus.EventBus
 import java.util.*
 
@@ -22,10 +24,6 @@ fun Activity.launchOver(clazz: String) {
     finish()
 }
 
-fun Any.log(tag: String, msg: String) {
-    LogUtil.d(tag, msg)
-
-}
 
 fun Any.toLogin() {
     launch(ARoutePath.LoginActivity)
@@ -37,7 +35,11 @@ fun Activity.finishActivity(activityName: String) {
 
 fun Any.toast(msg: String) {
     if (msg.isNoEmpty()) {
-        ToastUtils.showShort(msg)
+        if (msg == States.error) {
+            ToastUtils.showShort(R.string.string_error)
+        } else {
+            ToastUtils.showShort(msg)
+        }
     }
 }
 
@@ -46,7 +48,12 @@ fun Any.encrypt(msg: String): String {
     return RSAUtils.encrypt(msg, RSAUtils.getPublicKey(Constant.PUBLIC_KEY))
 }
 
+//判断字符串非空
 fun String.isNoEmpty(): Boolean {
     return this.isNotEmpty() || this != "null" || this != "NULL"
 }
 
+//本地存储
+fun Any.mmkv(): MMKV {
+    return MMKV.defaultMMKV()
+}
